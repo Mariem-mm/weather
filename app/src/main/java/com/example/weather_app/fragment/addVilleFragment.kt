@@ -51,6 +51,7 @@ class ajoutVilleFragment : Fragment() {
 
 
         val view= inflater.inflate(R.layout.fragment_ajout_ville, container, false)
+        // Getting the villeList from sharedPref to perform checks then save the new Ville if it doesn't already exist
         val sharedPref = activity?.getPreferences(Context.MODE_PRIVATE) ?: return view
         val gson = Gson()
         val villeJson = sharedPref.getString("villes", null)
@@ -63,6 +64,7 @@ class ajoutVilleFragment : Fragment() {
         val nameEditText = view.findViewById<EditText>(R.id.nom)
         val addVilleButton = view.findViewById<Button>(R.id.btn_add_ville)
 
+        // The button responsible for adding the new Ville
             addVilleButton.setOnClickListener {
             val nom = nameEditText.text.toString()
             if (villeList.any { it.name == nom }) {
@@ -74,9 +76,11 @@ class ajoutVilleFragment : Fragment() {
                 return@setOnClickListener
             }
             villeList = villeList + Ville(nom)
-
+                // Save the list in sharedPref
             saveVilles(villeList)
 
+
+            // Redirection to listVille
             val menuFragment = listVilleFragment()
             val fragManager = activity?.supportFragmentManager
             val villeTransaction = fragManager?.beginTransaction()
@@ -84,11 +88,12 @@ class ajoutVilleFragment : Fragment() {
             villeTransaction?.addToBackStack(null)
             villeTransaction?.commit()
 
+                // Display a message on success
             val successMessage = context?.getString(R.string.ville) + ' ' + nom + ' ' + context?.getString(R.string.ajoute_avec_succes)
             Toast.makeText(requireContext(), successMessage, Toast.LENGTH_SHORT).show()
         }
 
-
+        // The button responsible for cancelling and returning back to the list
         val Button_cancel = view.findViewById<Button>(R.id.btn_cancel)
         Button_cancel.setOnClickListener {
             val menuFragment = listVilleFragment()
@@ -100,7 +105,7 @@ class ajoutVilleFragment : Fragment() {
         }
 
 
-
+        // Check for input in my text to enable the add button
         nameEditText.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {
                 if (s.toString().trim().isNotEmpty()) {
@@ -120,6 +125,8 @@ class ajoutVilleFragment : Fragment() {
         return view
 
     }
+
+    // The function responsible for saving
     fun saveVilles(villes: List<Ville>) {
         val sharedPref = activity?.getPreferences(Context.MODE_PRIVATE) ?: return
         val editor = sharedPref.edit()

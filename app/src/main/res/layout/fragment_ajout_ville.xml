@@ -12,7 +12,7 @@
             android:id="@+id/nom"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:hint=" Entrez le nom de la ville "
+            android:hint="@string/entrez_nom_ville"
             android:gravity="center"
             android:inputType="textCapCharacters"
             android:maxLength="15"/>

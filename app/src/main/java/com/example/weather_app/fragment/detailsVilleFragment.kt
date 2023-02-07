@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.example.weather_app.R
 import com.example.weather_app.Weather
@@ -59,7 +60,7 @@ class DetailsVilleFragment : Fragment() {
         // Inflate the layout for this fragment
         val view = inflater.inflate(R.layout.fragment_details_ville, container, false)
 
-
+        // Returning the city's name from the list fragment
         val ville = arguments?.getSerializable("ville") as Ville
          cityName = ville.name
 
@@ -71,19 +72,16 @@ class DetailsVilleFragment : Fragment() {
          weatherIcon = view.findViewById<ImageView>(R.id.weather_icon)
         temp_minTextView = view.findViewById<TextView>(R.id.temp_min)
         temp_maxTextView = view.findViewById<TextView>(R.id.temp_max)
-
         pressureTextView = view.findViewById<TextView>(R.id.pressure_text_view)
         humidityTextView = view.findViewById<TextView>(R.id.humidity_text_view)
         speedTextView = view.findViewById<TextView>(R.id.Speed_text_view)
 
-
         fetchWeatherData()
-
 
         return view
     }
 
-
+    // The function responsible for fetching the weather data
     private fun fetchWeatherData() {
         val retrofit = Retrofit.Builder()
             .baseUrl("https://api.openweathermap.org/data/2.5/")
@@ -101,28 +99,27 @@ class DetailsVilleFragment : Fragment() {
 
                     mainTextView.text = weather!!.weather[0].main
                     descriptionTextView.text = weather.weather[0].description
-                    tempTextView.text = weather?.main?.temp.toString()
-                    temp_minTextView.text = weather?.main?.temp_min.toString()
-                    temp_maxTextView.text = weather?.main?.temp_max.toString()
-
-
-                    pressureTextView.text = weather?.main?.pressure.toString()
-                    humidityTextView.text = weather?.main?.humidity.toString()
-                    speedTextView.text = weather?.wind?.speed.toString()
+                    tempTextView.text = weather?.main?.temp.toString()+ ' '+"°C"
+                    temp_minTextView.text = weather?.main?.temp_min.toString()+ ' '+ "°C"
+                    temp_maxTextView.text = weather?.main?.temp_max.toString()+ ' '+"°C"
+                    pressureTextView.text = weather?.main?.pressure.toString()+ ' '+"HPa"
+                    humidityTextView.text = weather?.main?.humidity.toString()+ ' '+'%'
+                    speedTextView.text = weather?.wind?.speed.toString()+ ' '+"m/s"
 
                     // Set the weather icon
                     val value = weather.weather[0].icon
                     val resourceId = resources.getIdentifier("_" + value, "drawable", requireContext().packageName)
                     if (resourceId != 0) {
-                        // imageView is the imageView where you want to display the icon
                         weatherIcon.setImageResource(resourceId)
                     }
 
                 }
             }
 
+            // When the call fails, handle the failure
             override fun onFailure(call: Call<Weather>, t: Throwable) {
-               // Log.e("Retrofit Error", t.toString())
+                val onFailure = context?.getString(R.string.onFailure_msg)
+                Toast.makeText(requireContext(), onFailure, Toast.LENGTH_SHORT).show()
 
             }
         })

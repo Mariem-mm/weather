@@ -5,6 +5,7 @@ import retrofit2.http.GET
 import retrofit2.http.Query
 
 interface WeatherService {
+    // the interface responsible for the GET api call to openweather
     @GET("weather")
     fun getWeather(
         @Query("q") cityName: String,
