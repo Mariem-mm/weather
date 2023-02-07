@@ -51,6 +51,7 @@ class listVilleFragment : Fragment() {
 
         val view = inflater.inflate(R.layout.fragment_ville_list, container, false)
 
+        // Adding a city button redirection
         val addVilleBtn = view.findViewById<Button>(R.id.addVille)
         addVilleBtn.setOnClickListener {
             val menuFragment = ajoutVilleFragment()
@@ -65,6 +66,7 @@ class listVilleFragment : Fragment() {
         recyclerView = view.findViewById(R.id.recyclerView)
         recyclerView.layoutManager = LinearLayoutManager(context)
 
+        // Getting the list from sharedPreferences and displaying it
         val sharedPref = activity?.getPreferences(Context.MODE_PRIVATE) ?: return view
         val gson = Gson()
         val villeJson = sharedPref.getString("villes", "")
@@ -76,6 +78,7 @@ class listVilleFragment : Fragment() {
             listOf()
         }
 
+        // check if list is empty or not to render a message if it is or display the list if it's not empty
         if (villeList.isEmpty()) {
             view.findViewById<TextView>(R.id.emptyMessage).visibility = View.VISIBLE
             recyclerView.visibility = View.GONE

@@ -31,7 +31,7 @@
         android:id="@+id/addVille"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Ajouter une Ville"
+        android:text="@string/ajouter_une_ville"
         android:background="@color/bleu_transparent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintRight_toRightOf="parent"
